@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>J-N avant le 27 mars 2027</title>
+<style>
+:root{
+  --bg:#f3f1ec; --fg:#1d2b3a; --muted:#6b7684;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#14181d; --fg:#e8ecf1; --muted:#8c97a5;}
+}
+:root[data-theme="dark"]{--bg:#14181d; --fg:#e8ecf1; --muted:#8c97a5;}
+html,body{height:100%;margin:0}
+body{
+  background:var(--bg); color:var(--fg);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  font-family:"Helvetica Neue",Arial,sans-serif; text-align:center; padding:1rem;
+}
+#count{
+  font-size:clamp(4rem,22vw,12rem); font-weight:800; letter-spacing:-0.04em; line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+#label{margin-top:1.2rem; font-size:1.1rem; color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="count" aria-live="polite">J-…</div>
+<script>
+(function(){
+  var target = new Date(2027, 2, 27); // 27 mars 2027, heure locale
+  function update(){
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var n = Math.round((target - today) / 86400000);
+    var el = document.getElementById('count');
+    if(n > 0){ el.textContent = 'J-' + n; }
+    else if(n === 0){ el.textContent = 'J'; document.getElementById('label').textContent = 'c’est aujourd’hui !'; }
+    else { el.textContent = 'J+' + Math.abs(n); document.getElementById('label').textContent = 'depuis le 27 mars 2027'; }
+  }
+  update();
+  setInterval(update, 60000); // se met à jour automatiquement à minuit
+})();
+</script>
+</body>
+</html>
